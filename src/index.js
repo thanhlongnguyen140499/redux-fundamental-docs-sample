@@ -6,6 +6,7 @@ import App from './App'
 import './api/server'
 
 import store from './store'
+import { Provider } from 'react-redux'
 
 // Log the initial state
 // console.log('Initial state: ', store.getState())
@@ -13,13 +14,13 @@ import store from './store'
 
 // Every time the state changes, log it
 // Note that subscribe() returns a function for unregistering the listener
-const unsubscribe = store.subscribe(() =>
-  console.log('State after dispatch: ', store.getState())
-)
+// const unsubscribe = store.subscribe(() =>
+//   console.log('State after dispatch: ', store.getState())
+// )
 
-console.log('Dispatching action')
-store.dispatch({ type: 'todos/todoAdded', payload: 'Learn about actions' })
-console.log('Dispatch complete')
+// console.log('Dispatching action')
+// store.dispatch({ type: 'todos/todoAdded', payload: 'Learn about actions' })
+// console.log('Dispatch complete')
 
 // store.dispatch({ type: 'todos/todoAdded', payload: 'Learn about reducers' })
 // store.dispatch({ type: 'todos/todoAdded', payload: 'Learn about stores' })
@@ -34,9 +35,8 @@ console.log('Dispatch complete')
 //   payload: { color: 'red', changeType: 'added' }
 // })
 
-
 // Stop listening to state updates
-unsubscribe()
+// unsubscribe()
 
 // Dispatch one more action to see what happens
 
@@ -44,7 +44,9 @@ unsubscribe()
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 )
