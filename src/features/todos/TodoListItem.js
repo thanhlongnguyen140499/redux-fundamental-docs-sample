@@ -15,6 +15,7 @@ const colorOptions = availableColors.map((c) => (
 
 const TodoListItem = ({ id }) => {
   const todo = useSelector((state) => selectTodoById(state, id))
+  console.log('todo === ', todo)
   const { text, completed, color } = todo
 
   return (
