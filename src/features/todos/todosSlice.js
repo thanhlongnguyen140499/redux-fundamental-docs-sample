@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect'
+import { StatusFilters } from '../filters/filtersSlice'
 
 const initialState = [
   // { id: 0, text: 'Learn React', completed: true },
@@ -11,9 +12,53 @@ function nextTodoId(todos) {
   return maxId + 1
 }
 
+export const selectTodos = (state) => state.todos
+
 export const selectTodoIds = createSelector(
   (state) => state.todos,
   (todos) => todos.map((todo) => todo.id)
+)
+
+// export const selectFilteredTodos = createSelector(
+//   (state) => state.todos,
+//   (state) => state.filters.status,
+//   (todos, status) => {
+//     if (status === StatusFilters.All) {
+//       return todos
+//     }
+
+//     const completedStatus = status === StatusFilters.Completed
+//     return todos.filter((todo) => todo.completed === completedStatus)
+//   }
+// )
+
+export const selectFilteredTodos = createSelector(
+  // First input selector: all todos
+  selectTodos,
+  // Second input selector: all filter values
+  (state) => state.filters,
+  // Output selector: receives both values
+  (todos, filters) => {
+    const { status, colors } = filters
+    const showAllCompletions = status === StatusFilters.All
+    if (showAllCompletions && colors.length === 0) {
+      return todos
+    }
+
+    const completedStatus = status === StatusFilters.Completed
+    // Return either active or completed todos based on filter
+    return todos.filter((todo) => {
+      const statusMatches =
+        showAllCompletions || todo.completed === completedStatus
+      const colorMatches = colors.length === 0 || colors.includes(todo.color)
+      return statusMatches && colorMatches
+    })
+  }
+)
+
+export const selectFilteredTodoIds = createSelector(
+  selectFilteredTodos,
+  (filteredTodos) => filteredTodos.map((todo) => todo.id)
 )
 
 // Action creators
@@ -29,6 +74,13 @@ export const todoDeleted = (todoId) => {
   return {
     type: 'todos/todoDeleted',
     payload: todoId,
+  }
+}
+
+export const todoColorSelected = (todoId, color) => {
+  return {
+    type: 'todos/colorSelected',
+    payload: { todoId, color },
   }
 }
 
