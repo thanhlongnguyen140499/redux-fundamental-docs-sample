@@ -9,6 +9,20 @@ function nextTodoId(todos) {
   return maxId + 1
 }
 
+export const todoAdded = (todo) => {
+  return {
+    type: 'todos/todoAdded',
+    payload: todo,
+  }
+}
+
+export const todoDeleted = (todoId) => {
+  return {
+    type: 'todos/todoDeleted',
+    payload: todoId,
+  }
+}
+
 export default function todosReducer(state = initialState, action) {
   switch (action.type) {
     case 'todos/todoAdded': {
