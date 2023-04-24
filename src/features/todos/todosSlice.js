@@ -1,3 +1,5 @@
+import { createSelector } from 'reselect'
+
 const initialState = [
   // { id: 0, text: 'Learn React', completed: true },
   // { id: 1, text: 'Learn Redux', completed: false, color: 'purple' },
@@ -8,6 +10,13 @@ function nextTodoId(todos) {
   const maxId = todos.reduce((maxId, todo) => Math.max(todo.id, maxId), -1)
   return maxId + 1
 }
+
+export const selectTodoIds = createSelector(
+  (state) => state.todos,
+  (todos) => todos.map((todo) => todo.id)
+)
+
+// Action creators
 
 export const todoAdded = (todo) => {
   return {
@@ -22,6 +31,8 @@ export const todoDeleted = (todoId) => {
     payload: todoId,
   }
 }
+
+// reducer
 
 export default function todosReducer(state = initialState, action) {
   switch (action.type) {
